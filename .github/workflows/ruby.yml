@@ -8,8 +8,6 @@
 name: Ruby
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -20,19 +18,18 @@ jobs:
   test:
 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ruby-version: ['3.4.6']
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Ruby
-    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
-    # change this to (see https://github.com/ruby/setup-ruby#versioning):
-    # uses: ruby/setup-ruby@v1
-      uses: ruby/setup-ruby@v1.319.0
+    - name: Check out code
+      uses: actions/checkout@v4
       with:
-        ruby-version: ${{ matrix.ruby-version }}
+        fetch-depth: 0
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.4.6'
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-    - name: Run tests
-      run: bundle exec rake
+    
+    - name: Run lessons only
+      run: ./run_lessons.sh

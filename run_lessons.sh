@@ -33,13 +33,16 @@ for FILE in $CHANGED_FILES; do
   fi
 done
 
-# 4. Remove duplicate entries from our list
-UNIQUE_SPECS=$(echo "${SPECS_TO_RUN[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ')
+UNIQUE_SPECS=($(printf '%s\n' "${SPECS_TO_RUN[@]}" | sort -u))
 
-# 5. Run RSpec on the files, or skip if no relevant files changed
-if [ -n "$UNIQUE_SPECS" ]; then
-  echo "🎯 Running targeted tests for: $UNIQUE_SPECS"
-  bundle exec rspec $UNIQUE_SPECS
+if [ "${#UNIQUE_SPECS[@]}" -gt 0 ]; then
+  echo "🎯 Running targeted tests for: ${UNIQUE_SPECS[*]}"
+  for SPEC in "${UNIQUE_SPECS[@]}"; do
+    LESSON_DIR=$(dirname "$(dirname "$SPEC")")   # parent of the spec/ dir
+    SPEC_BASENAME=$(basename "$SPEC")
+    echo "  → $SPEC_BASENAME in $LESSON_DIR"
+    (cd "$LESSON_DIR" && bundle exec rspec "spec/$SPEC_BASENAME")
+  done
 else
   echo "✅ No exercise or spec changes detected. Skipping tests."
 fi

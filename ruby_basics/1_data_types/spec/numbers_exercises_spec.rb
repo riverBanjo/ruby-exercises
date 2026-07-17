@@ -57,11 +57,11 @@ RSpec.describe 'Numbers Exercises' do
   describe 'string to number exercise' do
 
     it 'returns an integer from a string' do
-      expect(string_to_number('1')).to eq(1)
+      expect(string_to_number('1')).to eql(1)
     end
 
     it 'returns a negative integer from a string' do
-      expect(string_to_number('-5')).to eq(-5)
+      expect(string_to_number('-5')).to eql(-5)
     end
   end
 

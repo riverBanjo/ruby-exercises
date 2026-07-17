@@ -1,5 +1,5 @@
 require 'spec_helper'
-require_relative '../exercises/string_exercises'
+require_relative '../exercises/strings_exercises'
 
 RSpec.describe 'String Exercises' do
 
